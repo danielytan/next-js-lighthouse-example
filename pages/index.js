@@ -1,9 +1,13 @@
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Image from 'next/image';
 
 import styles from '../styles/Home.module.css';
-import CodeSampleModal from '../components/CodeSampleModal';
+
+const CodeSampleModal = dynamic(() => import('../components/CodeSampleModal'), {
+  ssr: false,
+});
 
 export default function Start({ countries }) {
   const [results, setResults] = useState(countries);
@@ -74,10 +78,12 @@ export default function Start({ countries }) {
           <h2 className={styles.secondaryHeading}>Code Sample</h2>
           <p>Ever wondered how to write a function that prints Hello World?</p>
           <button onClick={() => setIsModalOpen(true)}>Show Me</button>
-          <CodeSampleModal
-            isOpen={isModalOpen}
-            closeModal={() => setIsModalOpen(false)}
-          />
+            isModalOpen && (
+              <CodeSampleModal
+                isOpen={isModalOpen}
+                closeModal={() => setIsModalOpen(false)}
+              />
+            );
         </div>
       </main>
 
